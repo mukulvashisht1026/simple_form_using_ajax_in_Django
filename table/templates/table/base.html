@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+	<title>person table</title>
+</head>
+<body class="container" style="background-color: #101010">
+	<center>
+<div class="container">
+		<form style="margin: 20px 20px 20px 20px" id="form" method="post" action="{% url 'table' %}">
+	{% csrf_token %}
+	<input id="msg_input" type="text" name="name" placeholder="name">
+	<input id="address_inp" type="text" name="address" placeholder="address">
+	<input id="dob" type="date" name="DOB">
+	<button type="submit">submit</button>
+</form>
+
+
+
+		<div class="container" style="width: 800px">
+		<table id="table-data" width="800px" style="margin: 20px 20px 20px 20px" class="table-dark"><tbody>
+		<tr>
+			<td><h3>name</h3></td>
+			<td><h3>address</h3></td>
+			<td><h3>date of birth</h3></td>
+
+		</tr>
+		{% for i in obj %}
+		<tr>
+			<td>{{i.name}}</td>
+			<td >{{i.address}}</td>
+			<td>{{i.DOB}}</td>
+
+
+		</tr>
+
+		{% endfor %}
+		</tbody>
+</table>
+	</div>
+
+
+</div></center>	
+
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+	
+	$(document).on('submit','#form',function(e){
+		e.preventDefault();
+
+		$.ajax({
+			type : 'post',
+			url : 'data/',
+			data:{
+				name:$("#msg_input").val(),
+				address:$("#address_inp").val(),
+				dob:$("#dob").val(),
+				csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
+			},
+			success : function(){
+			//	$("#table-data").append("<td>"+$("#msg_input").val()+"</td><td>"+$("#address_inp").val()+"</td><td>"+$("#dob").val()+",</td>");
+				$("#table-data").find('tbody')
+    .append($('<tr>').append(
+"<td>"+$("#msg_input").val()+"</td><td>"+$("#address_inp").val()+"</td><td>"+$("#dob").val()+",</td>"
+    	));
+				$("#msg_input").val('');
+				$("#address_inp").val('');
+				$("#dob").val('');
+
+			},
+		});
+
+	});
+</script>
+     </body>
+</html>	
