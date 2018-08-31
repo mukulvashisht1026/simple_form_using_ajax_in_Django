@@ -7,10 +7,11 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    
 	<title>person table</title>
 </head>
-<body class="container" style="background-color: #101010">
+<body class="container" >
 	<center>
 <div class="container">
 		<form style="margin: 20px 20px 20px 20px" id="form" method="post" action="{% url 'table' %}">
@@ -24,15 +25,17 @@
 
 
 		<div class="container" style="width: 800px">
-		<table id="table-data" width="800px" style="margin: 20px 20px 20px 20px" class="table-dark"><tbody>
-		<tr>
-			<td><h3>name</h3></td>
-			<td><h3>address</h3></td>
-			<td><h3>date of birth</h3></td>
+		<table id="table-data" width="800px" style="margin: 20px 20px 20px 20px" >
+		<thead><tr>
+			<th>name </th>
+			<th>address</th>
+			<th>date of birth</th>
 
-		</tr>
+		</tr></thead>
+		<tbody>
 		{% for i in obj %}
-		<tr>
+
+		<tr id="tr_Id">
 			<td>{{i.name}}</td>
 			<td >{{i.address}}</td>
 			<td>{{i.DOB}}</td>
@@ -53,8 +56,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table-data').dataTable();
+    });
+</script>
 <script>
-	
+
 	$(document).on('submit','#form',function(e){
 		e.preventDefault();
 
@@ -69,10 +80,18 @@
 			},
 			success : function(){
 			//	$("#table-data").append("<td>"+$("#msg_input").val()+"</td><td>"+$("#address_inp").val()+"</td><td>"+$("#dob").val()+",</td>");
-				$("#table-data").find('tbody')
-    .append($('<tr>').append(
+				/*$("#table-data").find('tbody')
+    .append($("#tr_Id").append(
 "<td>"+$("#msg_input").val()+"</td><td>"+$("#address_inp").val()+"</td><td>"+$("#dob").val()+",</td>"
-    	));
+    	));*/
+var table_data = $("#table-data").DataTable()
+    	table_data.row.add([
+    		$("#msg_input").val(),
+    		$("#address_inp").val(),
+    		$("#dob").val()
+    	]).draw()
+
+
 				$("#msg_input").val('');
 				$("#address_inp").val('');
 				$("#dob").val('');
@@ -81,6 +100,8 @@
 		});
 
 	});
+
+	
 </script>
      </body>
 </html>	
