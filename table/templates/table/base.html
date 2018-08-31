@@ -65,8 +65,72 @@
     });
 </script>
 <script>
+	var formData = $("#form")
+	var msgInput = $("#msg_input")
+    	var addressInp = $("#address_inp")
+    	var dobInp = $("#dob")
+    	var tableRow = $("#table-data")
+	console.log(window.location)
+  		loc = window.location
+  		var wsStart = 'ws://'
+		
+		if (loc.protocol == 'https:'){
+			wsStart = 'wss://'
+		}
+		var endpoint = wsStart +window.location.host+window.location.pathname
+		var socket = new WebSocket(endpoint)
 
-	$(document).on('submit','#form',function(e){
+
+		socket.onopen = function(event){
+			console.log("message open hai",event)
+			formData.submit(function(event){
+				event.preventDefault()
+				//console.log(msgText,addressInp,dobInp)
+				var nameInp =msgInput.val()
+				var addressText = addressInp.val()
+				var dobText = dobInp.val() 
+				//chatHolder.append("<li>"+msgText+" via "+me+"</li>")
+				//var formDataSerialized = formData.serialize() we use this but it also send middleware something 
+				//var finalData = {
+				//	'message':msgText
+				//}
+				//socket.send(JSON.stringify(finalData))
+				var finalData = {
+					'name':nameInp,
+					'address':addressText,
+					'dob':dobText
+				}
+				socket.send(JSON.stringify(finalData))
+
+
+				msgInput.val('')
+				dobInp.val('')
+				addressInp.val('')
+				//formData[0].reset()
+					
+
+			})
+		}
+		socket.onerror= function(event){
+			console.log("message error hai",event)
+		}
+		socket.onmessage= function(event){
+			console.log("message hai",event)
+			var get_data = JSON.parse(event.data)
+			var table_data = $("#table-data").DataTable()
+    	table_data.row.add([
+    		get_data.name,
+    		get_data.address,
+    		get_data.dob
+    	]).draw()
+
+		}
+		socket.onclose= function(event){
+			console.log("message onclose hai",event)
+		}
+
+
+	/*$(document).on('submit','#form',function(e){
 		e.preventDefault();
 
 		$.ajax({
@@ -83,7 +147,7 @@
 				/*$("#table-data").find('tbody')
     .append($("#tr_Id").append(
 "<td>"+$("#msg_input").val()+"</td><td>"+$("#address_inp").val()+"</td><td>"+$("#dob").val()+",</td>"
-    	));*/
+    	));
 var table_data = $("#table-data").DataTable()
     	table_data.row.add([
     		$("#msg_input").val(),
@@ -100,7 +164,7 @@ var table_data = $("#table-data").DataTable()
 		});
 
 	});
-
+*/
 	
 </script>
      </body>
