@@ -13,7 +13,7 @@ chardet==3.0.4
 constantly==15.1.0
 daphne==2.2.2
 dj-database-url==0.4.2
-Django==2.0.7
+Django==2.2.10
 django-crispy-forms==1.6.1
 djangorestframework==3.8.2
 gunicorn==19.7.1
