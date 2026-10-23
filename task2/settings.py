@@ -120,3 +120,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# --- Local/Docker run overrides (added for minimal runnable setup) ---
+import os as _os
+ALLOWED_HOSTS = _os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0').split(',')
+# TODO: load SECRET_KEY from the environment before deploying.
+if _os.environ.get('USE_MOCKS', '1') == '1':
+    CHANNEL_LAYERS = {'default': {'BACKEND': 'channels.layers.InMemoryChannelLayer'}}  # MOCK: replaces Redis channel layer
